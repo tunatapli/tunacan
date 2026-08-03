@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<!--[if IE 7 ]><html class="ie ie7 lte9 lte8 lte7" lang="en-US"><![endif]-->
+<!--[if IE 8]><html class="ie ie8 lte9 lte8" lang="en-US">	<![endif]-->
+<!--[if IE 9]><html class="ie ie9 lte9" lang="en-US"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html class="noIE" lang="en-US">
+<!--<![endif]-->
+	<head>
+		<!-- meta -->
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale = 1.0, maximum-scale=1.0, user-scalable=no"/>
+		<title>T A P L I</title>
+		<link rel="icon" type="image/png" href="assets/images/favicon.png">
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+		<link rel="stylesheet" href="assets/css/ionicons.min.css">
+		<link rel="stylesheet" href="assets/css/owl.carousel.css">
+		<link rel="stylesheet" href="assets/css/owl.theme.css">
+	    <link rel="stylesheet" href="assets/css/main.css">
+	    <link rel="stylesheet" href="assets/css/section.css">
+	    <link rel="stylesheet" href="assets/css/contact.css">
+		<style>
+			.msg-toast{position:fixed;left:50%;top:28px;transform:translateX(-50%) translateY(-24px);background:#fff;border-radius:14px;box-shadow:0 14px 44px rgba(0,0,0,.22);padding:16px 24px 16px 18px;display:flex;align-items:center;gap:14px;opacity:0;pointer-events:none;transition:opacity .35s ease, transform .35s ease;z-index:4000;max-width:90vw;}
+			.msg-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+			.msg-toast .mc{width:42px;height:42px;flex:0 0 42px;}
+			.msg-toast .mc circle{stroke:#43a047;stroke-width:3;fill:none;stroke-dasharray:163;stroke-dashoffset:163;}
+			.msg-toast.show .mc circle{animation:mcCircle .5s ease forwards;}
+			.msg-toast .mc path{stroke:#43a047;stroke-width:4.5;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:44;stroke-dashoffset:44;}
+			.msg-toast.show .mc path{animation:mcCheck .35s .38s ease forwards;}
+			.msg-toast.error .mc circle{stroke:#e53935;}
+			.msg-toast.error .mc path{stroke:#e53935;}
+			.msg-toast .mt{font-family:'Helvetica Neue',Arial,sans-serif;line-height:1.3;}
+			.msg-toast .mt b{display:block;font-size:15px;color:#1a1a1a;font-weight:600;}
+			.msg-toast .mt span{font-size:13px;color:#888;}
+			@keyframes mcCircle{to{stroke-dashoffset:0;}}
+			@keyframes mcCheck{to{stroke-dashoffset:0;}}
+		</style>
+	    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+			<!--[if lt IE 9]>
+				<script src="assets/js/html5shiv.js"></script>
+				<script src="assets/js/respond.js"></script>
+			<![endif]-->
+
+			<!--[if IE 8]>
+		    	<script src="assets/js/selectivizr.js"></script>
+		    <![endif]-->
+	</head>
+
+<body>
+
+<!-- Home -->
+	<section class="portfolio-header" id="header">
+		
+		<nav class="navbar navbar-default _navbar-fixed-top">
+			<div class="container">
+			<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">TAPLI</a>
+				</div> <!-- /.navbar-header -->
+
+		    <!-- Collect the nav links, forms, and other content for toggling -->
+			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav navbar-right">
+						<li class="active"><a href="index.html">home</a></li>
+						<li><a href="about.html">about me</a></li>
+						<li><a href="portfolio.html">portfolio</a></li>
+						<li><a href="awards.html">Experiences</a></li>
+						<li><a href="gallery.html">gallery</a></li>
+						<li><a href="geojourney.html">geo journey</a></li>
+						<li><a href="contact.html">contact</a></li>
+					</ul> <!-- /.nav -->
+			    </div><!-- /.navbar-collapse -->
+		  	</div><!-- /.container -->
+		</nav>
+	</section> <!-- /#header -->
+
+
+<!-- Section Background -->
+<!-- Contact with us -->
+<section class="contact section-wrapper" id="contact">
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- Address -->
+            <div class="col-md-4 contact-item col-sm-6 col-xs-12">
+                <a href="https://maps.app.goo.gl/ZWjhZRB6vVMRuVkD9" target="_blank">
+                    <i class="ion-location"></i>
+                </a>
+                <h3>Address</h3>
+                <p class="contact">
+                    <br>
+                    Ataşehir ISTANBUL
+                </p>
+            </div>
+
+            <!-- Email -->
+            <div class="col-md-4 contact-item col-sm-6 col-xs-12">
+                <a href="mailto:tapli44@gmail.com">
+                    <i class="ion-ios-email"></i>
+                </a>
+                <h3>Email Address</h3>
+                <p class="contact">
+                    <a href="mailto:tapli44@gmail.com">tapli44@gmail.com</a><br>
+                </p>
+            </div>
+        </div> <!-- /.row -->
+
+        <!-- Contact Form -->
+        <form id="msgForm" class="row form" action="https://formsubmit.co/tapli44@gmail.com" method="POST">
+            <h3>Leave A Message</h3>
+            <input type="hidden" name="_subject" value="New message from your portfolio site">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="text" name="_honey" style="display:none">
+            <input type="hidden" name="_next" value="https://tunatapli.github.io/tunacantapli/contact.html">
+
+
+            <div class="col-sm-4 col-xs-12 form-group">
+                <label class="sr-only">Name</label>
+                <input name="name" class="form-control" type="text" placeholder="First Name" required>
+            </div>
+
+            <div class="col-sm-4 col-xs-12 form-group">
+                <label class="sr-only">Email</label>
+                <input name="email" class="form-control" type="email" placeholder="Email address" required>
+            </div>
+
+            <div class="col-sm-4 col-xs-12 form-group">
+                <label class="sr-only">Website</label>
+                <input name="website" class="form-control" type="text" placeholder="Your website">
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 col-xs-12 form-group">
+                    <label class="sr-only">Message</label>
+                    <textarea name="message" class="message form-control" placeholder="Write message" required></textarea>
+                </div>
+
+                <input class="btn btn-sub" type="submit" value="Send Message">
+            </div>
+        </form> <!-- /.form -->
+    </div> <!-- /.container -->
+</section> <!-- /.contact -->
+
+<!-- Footer -->
+	<footer>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="copy">
+						Copyright &copy; Tunacan Taplı
+					</div>
+				</div>
+				<div class="col-sm-4 text-center">
+					<div class="social-icon">
+						<a href="https://www.facebook.com/tunacantapli?locale=tr_TR" target="_blank">
+							<div class="icon fb">
+								<i class="ion-social-facebook"></i>
+							</div>
+						</a>
+						<a href="https://x.com/tunatapli" target="_blank">
+							<div class="icon twitter">
+								<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+							</div>
+						</a>
+						<a href="https://www.instagram.com/tunatapli/" target="_blank">
+							<div class="icon instagram">
+								<i class="ion-social-instagram"></i>
+							</div>
+						</a>
+					</div>		
+				</div>
+				<div class="col-sm-4 text-right">
+					<div class="copy">
+											</div>
+				</div>
+			</div> <!-- /.row -->
+		</div> <!-- /.container -->
+	</footer>
+	
+
+
+	<!-- Animated send confirmation -->
+	<div class="msg-toast" id="msgToast" role="status" aria-live="polite">
+		<svg class="mc" viewBox="0 0 56 56"><circle cx="28" cy="28" r="26"/><path d="M16 29 l8 8 l16 -18"/></svg>
+		<div class="mt"><b id="msgToastTitle">Message sent!</b><span id="msgToastSub">Thanks — I will get back to you soon.</span></div>
+	</div>
+
+	<script>
+	(function(){
+		var form = document.getElementById('msgForm');
+		if(!form) return;
+		var toast = document.getElementById('msgToast');
+		var hideTimer;
+		function showToast(ok, title, sub){
+			toast.classList.toggle('error', !ok);
+			document.getElementById('msgToastTitle').textContent = title;
+			document.getElementById('msgToastSub').textContent = sub;
+			toast.classList.remove('show'); void toast.offsetWidth; toast.classList.add('show');
+			clearTimeout(hideTimer);
+			hideTimer = setTimeout(function(){ toast.classList.remove('show'); }, 5500);
+		}
+		form.addEventListener('submit', function(e){
+			e.preventDefault();
+			if(form.querySelector('[name="_honey"]') && form.querySelector('[name="_honey"]').value) return;
+			var btn = form.querySelector('[type="submit"]');
+			var oldVal = btn ? btn.value : '';
+			if(btn){ btn.value = 'Sending...'; btn.disabled = true; }
+			var data = {};
+			new FormData(form).forEach(function(v,k){
+				if(k.charAt(0) !== '_' || k === '_subject' || k === '_template') data[k] = v;
+			});
+			fetch('https://formsubmit.co/ajax/tapli44@gmail.com', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+				body: JSON.stringify(data)
+			})
+			.then(function(r){ return r.json(); })
+			.then(function(){
+				showToast(true, 'Message sent!', 'Thanks — I will get back to you soon.');
+				form.reset();
+			})
+			.catch(function(){
+				showToast(false, 'Could not send', 'Please try again or email me directly.');
+			})
+			.then(function(){ if(btn){ btn.value = oldVal; btn.disabled = false; } });
+		});
+	})();
+	</script>
+
+	<script src="assets/js/jquery-1.11.2.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/contact.js"></script>
+	<!-- // <script src="assets/js/smoothscroll.js"></script> -->
+	<script src="assets/js/script.js"></script>
+
+
+</body>
+</html>

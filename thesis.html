@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html class="noIE" lang="en-US">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>T A P L I — Graduation Thesis</title>
+	<link rel="icon" type="image/png" href="assets/images/favicon.png">
+
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/css/ionicons.min.css">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<link rel="stylesheet" href="assets/css/section.css">
+	<link rel="stylesheet" href="assets/css/portfolio.css">
+
+	<style>
+		.thesis-wrap { font-family:'Helvetica Neue',Arial,sans-serif; color:#333; line-height:1.7; max-width:1040px; margin:0 auto; padding:0 15px 70px; }
+		.thesis-kicker { font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:#7b2ff7; font-weight:700; margin-bottom:6px; }
+		.thesis-title { margin:0 0 10px; font-size:26px; line-height:1.3; color:#1a1a1a; }
+		.thesis-meta { font-size:13px; color:#888; margin:0 0 20px; }
+		.thesis-row { display:flex; flex-wrap:wrap; gap:32px; align-items:flex-start; }
+		.thesis-col { flex:1 1 340px; min-width:280px; }
+		.thesis-h4 { font-size:13px; text-transform:uppercase; letter-spacing:.05em; color:#7b2ff7; margin:0 0 10px; }
+		.thesis-wrap img { width:100%; border-radius:10px; box-shadow:0 4px 16px rgba(0,0,0,.12); }
+		.thesis-cap { font-size:12px; color:#999; margin:8px 2px 0; }
+		.thesis-wrap ul { margin:0; padding-left:18px; }
+		.thesis-wrap ul li { margin-bottom:6px; }
+		.thesis-figs { display:flex; flex-wrap:wrap; gap:24px; margin-top:30px; }
+		.thesis-figs figure { flex:1 1 320px; min-width:260px; margin:0; }
+		.thesis-back { display:inline-block; margin-top:34px; color:#7b2ff7; font-weight:600; text-decoration:none; }
+		.thesis-back:hover { text-decoration:underline; }
+	</style>
+</head>
+
+<body>
+
+	<!-- Header / Nav -->
+	<section class="portfolio-header" id="header">
+		<nav class="navbar navbar-default _navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="index.html">TAPLI</a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="index.html">home</a></li>
+						<li><a href="about.html">about me</a></li>
+						<li class="active"><a href="portfolio.html">portfolio</a></li>
+						<li><a href="awards.html">Experiences</a></li>
+						<li><a href="gallery.html">gallery</a></li>
+						<li><a href="geojourney.html">geo journey</a></li>
+						<li><a href="contact.html">contact</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</section>
+
+	<!-- Breadcrumb -->
+	<section class="section-background">
+		<div class="container">
+			<ol class="breadcrumb">
+				<li><a href="index.html">Home</a></li>
+				<li><a href="portfolio.html">Portfolio</a></li>
+				<li class="active">&nbsp;Graduation Thesis</li>
+			</ol>
+		</div>
+	</section>
+
+	<!-- Thesis -->
+	<section class="portfolio">
+		<div class="thesis-wrap">
+			<div class="thesis-row">
+				<div class="thesis-col">
+					<div class="thesis-kicker">Graduation Thesis</div>
+					<h1 class="thesis-title">Sensor Fusion and Spatial-Accuracy-Based Prediction, Risk Analysis and Collision Avoidance in Autonomous Vehicles</h1>
+					<p class="thesis-meta">İstanbul Technical University &middot; Department of Geomatics Engineering &middot; June 2026<br>Advisor: Assoc. Prof. Dr. Caner Güney</p>
+					<p style="margin:0;">This thesis evaluates how reliably an autonomous vehicle can perceive its surroundings and avoid collisions under changing weather. Using the CARLA 0.9.16 simulator on the Town10HD urban map, the positional accuracy and detection performance of six sensors &mdash; GNSS, IMU, a 128-channel LiDAR, radar, a YOLOv8n camera and a depth camera &mdash; were measured over 24,000 frames per condition (sunny, rainy and foggy).</p>
+				</div>
+				<div class="thesis-col">
+					<img src="assets/images/thesis/sensor-architecture.jpg" alt="Six-sensor architecture">
+					<p class="thesis-cap">Sensor placement and reference frame of the simulated vehicle.</p>
+				</div>
+			</div>
+
+			<div class="thesis-row" style="margin-top:34px;">
+				<div class="thesis-col">
+					<h4 class="thesis-h4">Approach</h4>
+					<ul>
+						<li><b>Localization:</b> Extended Kalman Filter fusing GNSS and IMU for ego pose.</li>
+						<li><b>Detection:</b> LiDAR&ndash;radar late-fusion for surrounding vehicles.</li>
+						<li><b>Prediction:</b> residual-learning LSTM for 3&nbsp;s trajectory forecasting.</li>
+						<li><b>Risk:</b> Time-to-Collision (TTC) analysis, 20&nbsp;m range, 2&nbsp;s threshold.</li>
+					</ul>
+				</div>
+				<div class="thesis-col">
+					<h4 class="thesis-h4">Key results</h4>
+					<ul>
+						<li>GNSS position RMSE &asymp; 0.16&nbsp;m, virtually weather-independent.</li>
+						<li>Radar RMSE 1.24&ndash;1.27&nbsp;m across all conditions &mdash; weather-resilient.</li>
+						<li>LiDAR&ndash;radar fusion expanded detection coverage by <b>+117%</b> (sunny).</li>
+						<li>LSTM cut trajectory error (ADE) by <b>18.6&ndash;25.4%</b> vs. a constant-velocity baseline; best case 0.69&nbsp;m ADE / 0.72&nbsp;m FDE.</li>
+						<li><b>Zero collisions</b> recorded across every session.</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="thesis-figs">
+				<figure>
+					<img src="assets/images/thesis/thesis-lstm.jpg" alt="LSTM trajectory prediction">
+					<figcaption class="thesis-cap">LSTM trajectory prediction vs. ground truth (sunny, optimal subset).</figcaption>
+				</figure>
+				<figure>
+					<img src="assets/images/thesis/thesis-fde.jpg" alt="FDE comparison chart">
+					<figcaption class="thesis-cap">Final Displacement Error: LSTM vs. constant-velocity baseline by weather.</figcaption>
+				</figure>
+			</div>
+
+			<a class="thesis-back" href="portfolio.html">&larr; Back to portfolio</a>
+		</div>
+	</section>
+
+	<!-- Footer -->
+	<footer>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-4"><div class="copy">Copyright &copy; Tunacan Taplı</div></div>
+				<div class="col-sm-4 text-center">
+					<div class="social-icon">
+						<a href="https://www.facebook.com/tunacantapli?locale=tr_TR" target="_blank"><div class="icon fb"><i class="ion-social-facebook"></i></div></a>
+						<a href="https://x.com/tunatapli" target="_blank"><div class="icon twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div></a>
+						<a href="https://www.instagram.com/tunatapli/" target="_blank"><div class="icon instagram"><i class="ion-social-instagram"></i></div></a>
+					</div>
+				</div>
+				<div class="col-sm-4 text-right"><div class="copy"></div></div>
+			</div>
+		</div>
+	</footer>
+
+	<script src="assets/js/jquery-1.11.2.min.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="assets/js/script.js"></script>
+</body>
+</html>

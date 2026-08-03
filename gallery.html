@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<!--[if IE 7 ]><html class="ie ie7 lte9 lte8 lte7" lang="en-US"><![endif]-->
+<!--[if IE 8]><html class="ie ie8 lte9 lte8" lang="en-US"><![endif]-->
+<!--[if IE 9]><html class="ie ie9 lte9" lang="en-US"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html class="noIE" lang="en-US">
+<!--<![endif]-->
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>T A P L I</title>
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/ionicons.min.css">
+  <link rel="stylesheet" href="assets/css/owl.carousel.css">
+  <link rel="stylesheet" href="assets/css/owl.theme.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/section.css">
+  <link rel="stylesheet" href="assets/css/gallery.css">
+</head>
+
+<body>
+
+  <!-- Header -->
+  <section class="portfolio-header" id="header">
+    <nav class="navbar navbar-default _navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button"
+                  class="navbar-toggle collapsed"
+                  data-toggle="collapse"
+                  data-target="#bs-example-navbar-collapse-1"
+                  aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">TAPLI</a>
+        </div>
+        <div class="collapse navbar-collapse"
+             id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active"><a href="index.html">home</a></li>
+            <li><a href="about.html">about me</a></li>
+            <li><a href="portfolio.html">portfolio</a></li>
+            <li><a href="awards.html">Experiences</a></li>
+            <li><a href="gallery.html">gallery</a></li>
+            <li><a href="geojourney.html">geo journey</a></li>
+            <li><a href="contact.html">contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </section>
+
+  <!-- Breadcumb -->
+  <section class="section-background">
+    <div class="container">
+      <ol class="breadcrumb">
+        <li><a href="index-multipage.html">Home</a></li>
+        <li class="active">Gallery</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Portfolio Gallery -->
+  <section class="portfolio" id="portfolio">
+    <div class="container section-wrapper">
+      <h2 class="section-title black">Gallery</h2>
+      <div class="underline purple"></div>
+
+      <!-- Izgara yoğunluğu kontrolü -->
+      <div class="gallery-controls">
+        <span class="gc-label">Daha az</span>
+        <div class="gc-slider">
+          <input type="range" id="colRange" min="2" max="6" value="3" step="1">
+        </div>
+        <span class="gc-label">Daha fazla</span>
+        <span class="gc-count"><span id="colCount">3</span> / sıra</span>
+      </div>
+
+      <div class="gallery" id="gallery">
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_image1.jpg" data-full="assets/images/gallery/full_image1.jpg" loading="lazy" alt="image1" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>Erzincan-Kemah</p>
+            <p>39°37'46.4"N 39°13'51.6"E</p>
+            <p>
+              <a href="https://maps.app.goo.gl/DyDykGTUcMPkBxxs5" target="_blank" rel="noopener">View on map</a>
+            </p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_image2.jpg" data-full="assets/images/gallery/full_image2.jpg" loading="lazy" alt="image2" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>Istanbul-Rumeli Kasrı</p>
+            <p>41°10'34.4"N 29°04'22.4"E</p>
+            <p>
+              <a href="https://maps.app.goo.gl/JHqCcShjiLJ11inw7" target="_blank" rel="noopener">View on map</a>
+            </p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_image3.jpg" data-full="assets/images/gallery/full_image3.jpg" loading="lazy" alt="image3" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>Antalya-Side Ancient City</p>
+            <p>36°45'51.8"N 31°23'10.8"E</p>
+            <p>
+              <a href="https://maps.app.goo.gl/E8vUNK661WSUKv9d6" target="_blank" rel="noopener">View on map</a>
+            </p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_image4.jpg" data-full="assets/images/gallery/full_image4.jpg" loading="lazy" alt="image4" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>Istanbul-Topkapı Palace</p>
+            <p>41°00'42.9"N 28°59'01.2"E</p>
+            <p>
+              <a href="https://maps.app.goo.gl/5x7fYrgNBDhmygaW9" target="_blank" rel="noopener">View on map</a>
+            </p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_image5.jpg" data-full="assets/images/gallery/full_image5.jpg" loading="lazy" alt="image5" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>Trier-Germany</p>
+            <p>49°45'23.8"N 6°38'28.3"E</p>
+            <p>
+              <a href="https://maps.app.goo.gl/wyKmV8d7FLFhENzP9" target="_blank" rel="noopener">View on map</a>
+            </p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_image6.jpg" data-full="assets/images/gallery/full_image6.jpg" loading="lazy" alt="image6" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>Isparta-Gölcük Lake</p>
+            <p>37°43'39.1"N 30°29'33.7"E</p>
+            <p>
+              <a href="https://maps.app.goo.gl/xMgGwjyYgB8P5Ffv8" target="_blank" rel="noopener">View on map</a>
+            </p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_image7.jpg" data-full="assets/images/gallery/full_image7.jpg" loading="lazy" alt="image7" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>Istanbul-Atatürk Airport</p>
+            <p>40°58'46.1"N 28°49'14.0"E</p>
+            <p>
+              <a href="https://maps.app.goo.gl/kex6KXPXLpALrtCUA" target="_blank" rel="noopener">View on map</a>
+            </p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_image8.jpg" data-full="assets/images/gallery/full_image8.jpg" loading="lazy" alt="image8" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>Erzincan-Ergan Ski Center</p>
+            <p>39°36'31.7"N 39°29'34.6"E</p>
+            <p>
+              <a href="https://maps.app.goo.gl/6XisCo3fEpdyM6PB7" target="_blank" rel="noopener">View on map</a>
+            </p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_image9.jpg" data-full="assets/images/gallery/full_image9.jpg" loading="lazy" alt="image9" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>Antalya-Sea Cliffs</p>
+            <p>36°53'04.7"N 30°41'51.1"E</p>
+            <p>
+              <a href="https://maps.app.goo.gl/zxKcA2ExpTaG3D9q8" target="_blank" rel="noopener">View on map</a>
+            </p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_2.jpg" data-full="assets/images/gallery/full_2.jpg" loading="lazy" alt="2" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>2</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0028.jpg" data-full="assets/images/gallery/full_DSC_0028.jpg" loading="lazy" alt="DSC_0028" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0028</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0049.jpg" data-full="assets/images/gallery/full_DSC_0049.jpg" loading="lazy" alt="DSC_0049" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0049</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0051.jpg" data-full="assets/images/gallery/full_DSC_0051.jpg" loading="lazy" alt="DSC_0051" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0051</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0056yeni.jpg" data-full="assets/images/gallery/full_DSC_0056yeni.jpg" loading="lazy" alt="DSC_0056yeni" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0056yeni</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0065_1.jpg" data-full="assets/images/gallery/full_DSC_0065_1.jpg" loading="lazy" alt="DSC_0065_1" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0065_1</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0087.jpg" data-full="assets/images/gallery/full_DSC_0087.jpg" loading="lazy" alt="DSC_0087" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0087</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0103.jpg" data-full="assets/images/gallery/full_DSC_0103.jpg" loading="lazy" alt="DSC_0103" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0103</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0119.jpg" data-full="assets/images/gallery/full_DSC_0119.jpg" loading="lazy" alt="DSC_0119" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0119</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0127.jpg" data-full="assets/images/gallery/full_DSC_0127.jpg" loading="lazy" alt="DSC_0127" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0127</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0130.jpg" data-full="assets/images/gallery/full_DSC_0130.jpg" loading="lazy" alt="DSC_0130" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0130</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0141.jpg" data-full="assets/images/gallery/full_DSC_0141.jpg" loading="lazy" alt="DSC_0141" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0141</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0144.jpg" data-full="assets/images/gallery/full_DSC_0144.jpg" loading="lazy" alt="DSC_0144" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0144</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0156.jpg" data-full="assets/images/gallery/full_DSC_0156.jpg" loading="lazy" alt="DSC_0156" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0156</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0162.jpg" data-full="assets/images/gallery/full_DSC_0162.jpg" loading="lazy" alt="DSC_0162" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0162</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0295.jpg" data-full="assets/images/gallery/full_DSC_0295.jpg" loading="lazy" alt="DSC_0295" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0295</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0339.jpg" data-full="assets/images/gallery/full_DSC_0339.jpg" loading="lazy" alt="DSC_0339" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0339</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0356.jpg" data-full="assets/images/gallery/full_DSC_0356.jpg" loading="lazy" alt="DSC_0356" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0356</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0440.jpg" data-full="assets/images/gallery/full_DSC_0440.jpg" loading="lazy" alt="DSC_0440" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0440</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0470.jpg" data-full="assets/images/gallery/full_DSC_0470.jpg" loading="lazy" alt="DSC_0470" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0470</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0480.jpg" data-full="assets/images/gallery/full_DSC_0480.jpg" loading="lazy" alt="DSC_0480" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0480</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0488.jpg" data-full="assets/images/gallery/full_DSC_0488.jpg" loading="lazy" alt="DSC_0488" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0488</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0585.jpg" data-full="assets/images/gallery/full_DSC_0585.jpg" loading="lazy" alt="DSC_0585" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0585</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0647.jpg" data-full="assets/images/gallery/full_DSC_0647.jpg" loading="lazy" alt="DSC_0647" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0647</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0736.jpg" data-full="assets/images/gallery/full_DSC_0736.jpg" loading="lazy" alt="DSC_0736" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0736</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0825.jpg" data-full="assets/images/gallery/full_DSC_0825.jpg" loading="lazy" alt="DSC_0825" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0825</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0827.jpg" data-full="assets/images/gallery/full_DSC_0827.jpg" loading="lazy" alt="DSC_0827" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0827</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0845.jpg" data-full="assets/images/gallery/full_DSC_0845.jpg" loading="lazy" alt="DSC_0845" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0845</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_DSC_0846.jpg" data-full="assets/images/gallery/full_DSC_0846.jpg" loading="lazy" alt="DSC_0846" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>DSC_0846</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_IMG_7188.jpg" data-full="assets/images/gallery/full_IMG_7188.jpg" loading="lazy" alt="IMG_7188" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>IMG_7188</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/images/gallery/thumb_IMG_7207_copy.jpg" data-full="assets/images/gallery/full_IMG_7207_copy.jpg" loading="lazy" alt="IMG_7207_copy" onclick="openModal(this)">
+          <div class="photo-info">
+            <p>IMG_7207 copy</p>
+            <p class="coord-pending">Konum eklenecek</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal Tam Ekran -->
+  <div id="modal" class="modal">
+    <span class="close" onclick="closeModal()" title="Kapat">&times;</span>
+    <button type="button" class="zoom-btn" id="zoomBtn" title="Yakınlaştır / Uzaklaştır" aria-label="Yakınlaştır">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+        <line x1="11" y1="8" x2="11" y2="14"></line>
+        <line x1="8" y1="11" x2="14" y2="11"></line>
+      </svg>
+    </button>
+    <img class="modal-content" id="modal-img" alt="Büyütülmüş Görsel">
+  </div>
+
+ 
+ <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="copy">
+            Copyright &copy; Tunacan Taplı
+          </div>
+        </div>
+        <div class="col-sm-4 text-center">
+          <div class="social-icon">
+            <a href="https://www.facebook.com/tunacantapli?locale=tr_TR" target="_blank">
+              <div class="icon fb">
+                <i class="ion-social-facebook"></i>
+              </div>
+            </a>
+            <a href="https://x.com/tunatapli" target="_blank">
+              <div class="icon twitter">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </div>
+            </a>
+            <a href="https://www.instagram.com/tunatapli/" target="_blank">
+              <div class="icon instagram">
+                <i class="ion-social-instagram"></i>
+              </div>
+            </a>
+          </div>    
+        </div>
+        <div class="col-sm-4 text-right">
+          <div class="copy">
+                      </div>
+        </div>
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+  </footer>
+
+  <!-- JS -->
+  <script src="assets/js/jquery-1.11.2.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+  <script src="assets/js/owl.carousel.min.js"></script>
+  <script src="assets/js/contact.js"></script>
+  <script src="assets/js/script.js"></script>
+
+  <script>
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modal-img');
+    const zoomBtn = document.getElementById('zoomBtn');
+    let zoomed = false;
+
+    function openModal(img) {
+      modalImg.src = img.getAttribute('data-full') || img.src;
+      modal.style.display = 'flex';
+      setZoom(false);
+    }
+    function closeModal() {
+      modal.style.display = 'none';
+      setZoom(false);
+    }
+    function setZoom(state, e) {
+      zoomed = state;
+      if (zoomed) {
+        modalImg.classList.add('zoomed');
+        if (e) setOrigin(e);
+      } else {
+        modalImg.classList.remove('zoomed');
+        modalImg.style.transformOrigin = 'center center';
+      }
+    }
+    function setOrigin(e) {
+      const r = modalImg.getBoundingClientRect();
+      const x = Math.min(100, Math.max(0, (e.clientX - r.left) / r.width * 100));
+      const y = Math.min(100, Math.max(0, (e.clientY - r.top) / r.height * 100));
+      modalImg.style.transformOrigin = x + '% ' + y + '%';
+    }
+    // Fotoğrafa tıklayınca yakınlaştır/uzaklaştır
+    modalImg.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setZoom(!zoomed, e);
+    });
+    modalImg.addEventListener('mousemove', function (e) {
+      if (zoomed) setOrigin(e);
+    });
+    // Büyüteç butonu
+    zoomBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setZoom(!zoomed);
+    });
+    // Boş alana tıklayınca kapat
+    modal.addEventListener('click', function (e) {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Izgara yoğunluğu kaydırıcısı
+    (function () {
+      const range = document.getElementById('colRange');
+      const gallery = document.getElementById('gallery');
+      const count = document.getElementById('colCount');
+      function apply(v) {
+        gallery.style.setProperty('--cols', v);
+        count.textContent = v;
+        const pct = (v - range.min) / (range.max - range.min) * 100;
+        range.style.background =
+          'linear-gradient(90deg, #7b2ff7 0%, #f107a3 ' + pct + '%, rgba(0,0,0,0.12) ' + pct + '%, rgba(0,0,0,0.12) 100%)';
+      }
+      const saved = localStorage.getItem('galleryCols');
+      if (saved) { range.value = saved; }
+      apply(range.value);
+      range.addEventListener('input', function () {
+        apply(this.value);
+        localStorage.setItem('galleryCols', this.value);
+      });
+    })();
+  </script>
+
+</body>
+</html>

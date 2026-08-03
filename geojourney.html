@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html class="noIE" lang="en">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T A P L I — Geo Journey</title>
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+
+  <!-- Site CSS -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/ionicons.min.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/section.css">
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    html, body { height: 100%; margin: 0; }
+    .gj-wrap { position: relative; }
+    #map { width: 100%; height: 100vh; min-height: 600px; background: #aadaff; }
+
+    /* ---- Stats panel (top-left, collapsible) ---- */
+    .gj-stats {
+      background: rgba(255,255,255,0.96);
+      border-radius: 12px;
+      box-shadow: 0 6px 22px rgba(0,0,0,0.25);
+      width: 290px; overflow: hidden;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+    .gj-stats-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, #7b2ff7, #f107a3);
+      color: #fff; cursor: pointer; user-select: none;
+    }
+    .gj-stats-head h3 { margin: 0; font-size: 15px; letter-spacing: .03em; }
+    .gj-stats-head .chev { transition: transform .25s ease; font-size: 18px; }
+    .gj-stats.collapsed .chev { transform: rotate(-90deg); }
+    .gj-stats-body {
+      padding: 14px 16px 16px; max-height: 560px;
+      transition: max-height .3s ease, padding .3s ease, opacity .25s ease; opacity: 1;
+    }
+    .gj-stats.collapsed .gj-stats-body { max-height: 0; padding-top: 0; padding-bottom: 0; opacity: 0; }
+    .gj-block { margin-bottom: 16px; } .gj-block:last-child { margin-bottom: 0; }
+    .gj-block h4 { margin: 0 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #888; }
+    .gj-stat-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+    .gj-stat-row .label { font-size: 13px; color: #444; }
+    .gj-stat-row .val { font-size: 14px; font-weight: 700; color: #333; }
+    .gj-bar { height: 8px; border-radius: 999px; background: #eee; overflow: hidden; margin-top: 4px; }
+    .gj-bar > span { display: block; height: 100%; width: 0; border-radius: 999px; transition: width .5s ease; }
+    .gj-bar.tr > span   { background: linear-gradient(90deg,#43a047,#a5d6a7); }
+    .gj-bar.wd > span   { background: linear-gradient(90deg,#1e88e5,#90caf9); }
+    .gj-bar.ps > span   { background: linear-gradient(90deg,#e53935,#ffab91); }
+    .gj-pct { font-size: 12px; color: #777; margin-top: 3px; }
+
+    .gj-actions { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+    .gj-btn { border: none; border-radius: 8px; padding: 7px 10px; font-size: 12px; cursor: pointer;
+      background: #f0eaff; color: #6a1bd1; font-weight: 600; transition: background .15s ease; }
+    .gj-btn:hover { background: #e2d4ff; }
+    .gj-btn.active { background: #7b2ff7; color: #fff; }
+    .gj-btn.danger { background: #ffe6e6; color: #c62828; }
+    .gj-btn.danger:hover { background: #ffd0d0; }
+    .gj-hint { font-size: 11px; color: #999; margin-top: 8px; line-height: 1.5; }
+
+    /* ---- Layer control (themed) ---- */
+    .leaflet-control-layers {
+      border: none !important; border-radius: 14px !important;
+      box-shadow: 0 8px 26px rgba(0,0,0,0.20) !important;
+      background: rgba(255,255,255,0.97) !important;
+      font-family: 'Helvetica Neue', Arial, sans-serif; overflow: hidden;
+    }
+    .leaflet-control-layers-toggle { width: 40px; height: 40px; background-size: 22px 22px; }
+    .leaflet-control-layers-expanded { padding: 0 !important; }
+    .leaflet-control-layers-list { font-size: 13px; padding: 10px 14px; }
+    .leaflet-control-layers label { display: flex; align-items: center; gap: 9px; margin: 6px 0; cursor: pointer; color: #3a3a3a; }
+    .leaflet-control-layers label span { display: flex; align-items: center; gap: 9px; }
+    .leaflet-control-layers-base label { font-weight: 600; }
+    .leaflet-control-layers input[type="radio"], .leaflet-control-layers input[type="checkbox"] {
+      width: 16px; height: 16px; accent-color: #7b2ff7; cursor: pointer; margin: 0;
+    }
+    .leaflet-control-layers-separator { border-top: 1px solid #ececec; margin: 9px 0; }
+
+    /* ---- Search box ---- */
+    .gj-search { position: relative; width: 300px; font-family: 'Helvetica Neue', Arial, sans-serif; }
+    .gj-search input {
+      width: 100%; box-sizing: border-box; border: none; border-radius: 12px;
+      padding: 11px 38px 11px 16px; font-size: 14px; color: #333;
+      background: rgba(255,255,255,0.97); box-shadow: 0 8px 26px rgba(0,0,0,0.20); outline: none;
+    }
+    .gj-search input:focus { box-shadow: 0 0 0 3px rgba(123,47,247,0.25), 0 8px 26px rgba(0,0,0,0.20); }
+    .gj-search .gj-search-ico { position: absolute; right: 13px; top: 50%; transform: translateY(-50%); color: #b39ddb; pointer-events: none; }
+    .gj-results {
+      margin-top: 6px; background: #fff; border-radius: 12px; box-shadow: 0 8px 26px rgba(0,0,0,0.22);
+      max-height: 320px; overflow-y: auto; display: none;
+    }
+    .gj-results.open { display: block; }
+    .gj-result { display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 9px 14px; cursor: pointer; border-bottom: 1px solid #f3f3f3; font-size: 13px; color: #333; }
+    .gj-result:last-child { border-bottom: none; }
+    .gj-result:hover, .gj-result.active { background: #f3ecff; }
+    .gj-result .gj-tag { font-size: 10px; text-transform: uppercase; letter-spacing: .04em;
+      color: #7b2ff7; background: #f0eaff; padding: 2px 7px; border-radius: 999px; white-space: nowrap; }
+    .gj-result .gj-sub { color: #999; font-size: 11px; }
+
+    /* Tıklayınca çıkan kare odak çerçevesini kaldır */
+    .leaflet-interactive:focus, path.leaflet-interactive:focus { outline: none !important; }
+    svg.leaflet-zoom-animated { outline: none; }
+
+    /* ---- Themed Leaflet popups (match site gradient) ---- */
+    .leaflet-popup-content-wrapper {
+      background: linear-gradient(135deg, #7b2ff7, #f107a3);
+      color: #fff; border-radius: 12px; box-shadow: 0 6px 22px rgba(0,0,0,.35);
+    }
+    .leaflet-popup-content { margin: 12px 14px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; }
+    .leaflet-popup-content b { font-size: 14px; }
+    .leaflet-popup-content a { color: #fff; text-decoration: underline; }
+    .leaflet-popup-tip { background: #b41fce; }
+    .leaflet-popup-close-button { color: #fff !important; }
+    .gj-pop-btn { margin-top: 8px; border: none; border-radius: 7px; padding: 6px 10px; cursor: pointer;
+      background: #fff; color: #6a1bd1; font-size: 12px; font-weight: 700; }
+    .gj-pop-btn.sec { background: rgba(255,255,255,0.25); color: #fff; font-weight: 600; margin-top: 5px; }
+    .gj-pop-meta { opacity: .9; font-size: 12px; margin-top: 2px; }
+
+    #gj-loading { position: absolute; inset: 0; z-index: 1200; display: flex; align-items: center;
+      justify-content: center; flex-direction: column; background: rgba(255,255,255,0.92);
+      color: #555; gap: 12px; font-family: Arial, sans-serif; }
+    #gj-loading .spin { width: 42px; height: 42px; border: 4px solid #e0d4ff; border-top-color: #7b2ff7;
+      border-radius: 50%; animation: gjspin 1s linear infinite; }
+    @keyframes gjspin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 600px) { .gj-stats { width: 230px; } }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header / Nav -->
+  <section class="portfolio-header" id="header">
+    <nav class="navbar navbar-default _navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                  data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">TAPLI</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="index.html">home</a></li>
+            <li><a href="about.html">about me</a></li>
+            <li><a href="portfolio.html">portfolio</a></li>
+            <li><a href="awards.html">Experiences</a></li>
+            <li><a href="gallery.html">gallery</a></li>
+            <li class="active"><a href="geojourney.html">geo journey</a></li>
+            <li><a href="contact.html">contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </section>
+
+  <div class="gj-wrap">
+    <div id="map"></div>
+    <div id="gj-loading">
+      <div class="spin"></div>
+      <div>Loading map data…</div>
+    </div>
+  </div>
+
+  <!-- 277 mountain passes data -->
+  <script src="assets/js/passes.js"></script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+
+    const SRC = {
+      world:     'https://cdn.jsdelivr.net/gh/johan/world.geo.json@master/countries.geo.json',
+      provinces: 'https://cdn.jsdelivr.net/gh/uyasarkocal/borders-of-turkey@master/lvl1-TR.geojson',
+      districts: 'https://cdn.jsdelivr.net/gh/uyasarkocal/borders-of-turkey@master/lvl2-TR.geojson'
+    };
+
+    const LS = {
+      countries: 'gj_visitedCountries',
+      provincesV:'gj_visitedProvinces',
+      districts: 'gj_visitedDistricts',
+      passes:    'gj_crossedPasses',
+      custom:    'gj_customPasses',
+      distmap:   'gj_distProvMap_v1'
+    };
+    const loadSet = k => new Set(JSON.parse(localStorage.getItem(k) || '[]'));
+    const saveSet = (k,s) => localStorage.setItem(k, JSON.stringify([...s]));
+    const loadArr = k => JSON.parse(localStorage.getItem(k) || '[]');
+    const saveArr = (k,a) => localStorage.setItem(k, JSON.stringify(a));
+
+    let visitedCountries = loadSet(LS.countries);
+    let visitedProvinces = loadSet(LS.provincesV); // il adları (normalize)
+    let visitedDistricts = loadSet(LS.districts);
+    let crossedPasses    = loadSet(LS.passes);
+    let customPasses     = loadArr(LS.custom);
+
+    // ---------------- Map & base layers ----------------
+    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19, attribution:'© OpenStreetMap' });
+    const sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom:19, attribution:'Tiles © Esri' });
+    const topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { maxZoom:17, attribution:'© OpenTopoMap (CC-BY-SA)' });
+
+    const map = L.map('map', { center:[39.0,35.2], zoom:6, layers:[osm], worldCopyJump:true, zoomControl:false });
+    map.createPane('countriesPane'); map.getPane('countriesPane').style.zIndex = 410;
+    map.createPane('provincesPane'); map.getPane('provincesPane').style.zIndex = 415;
+    map.createPane('districtsPane'); map.getPane('districtsPane').style.zIndex = 420;
+    const baseLayers = { 'Map': osm, 'Satellite': sat, 'Terrain': topo };
+
+    const STYLE = {
+      countryDefault:  { color:'#90a4ae', weight:0.6, fillColor:'#cfd8dc', fillOpacity:0.25 },
+      countryVisited:  { color:'#2e7d32', weight:0.8, fillColor:'#66bb6a', fillOpacity:0.55 },
+      countryHover:    { weight:1.6, color:'#607d8b' },
+      provinceDefault: { color:'#8d6e63', weight:0.8, fillColor:'#ffffff', fillOpacity:0.03 },
+      provinceVisited: { color:'#33691e', weight:1.0, fillColor:'#9ccc65', fillOpacity:0.5 },
+      provinceHover:   { weight:1.6, color:'#5d4037' },
+      districtDefault: { color:'#90caf9', weight:0.4, fillColor:'#e3f2fd', fillOpacity:0.15 },
+      districtVisited: { color:'#1b5e20', weight:0.7, fillColor:'#43a047', fillOpacity:0.55 },
+      districtHover:   { weight:1.4, color:'#1976d2' }
+    };
+
+    // ---------------- Geometry helpers ----------------
+    function pointInRing(pt, ring){let x=pt[0],y=pt[1],inside=false;
+      for(let i=0,j=ring.length-1;i<ring.length;j=i++){const xi=ring[i][0],yi=ring[i][1],xj=ring[j][0],yj=ring[j][1];
+        const it=((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi); if(it)inside=!inside;}return inside;}
+    function pointInGeom(pt,geom){const polys=geom.type==='Polygon'?[geom.coordinates]:geom.coordinates;
+      for(const poly of polys){if(pointInRing(pt,poly[0])){let hole=false;for(let h=1;h<poly.length;h++)if(pointInRing(pt,poly[h])){hole=true;break;}if(!hole)return true;}}return false;}
+    function featureCentroid(geom){let sx=0,sy=0,n=0;const polys=geom.type==='Polygon'?[geom.coordinates]:geom.coordinates;
+      for(const poly of polys)for(const p of poly[0]){sx+=p[0];sy+=p[1];n++;}return [sx/n,sy/n];}
+    function bbox(geom){let a=Infinity,b=Infinity,c=-Infinity,d=-Infinity;const polys=geom.type==='Polygon'?[geom.coordinates]:geom.coordinates;
+      for(const poly of polys)for(const p of poly[0]){if(p[0]<a)a=p[0];if(p[0]>c)c=p[0];if(p[1]<b)b=p[1];if(p[1]>d)d=p[1];}return [a,b,c,d];}
+    const nrm = s => (s||'').toLocaleLowerCase('tr-TR').replace(/[\s\.]/g,'');
+
+    const TOTAL_PROVINCES = 81;
+    let countriesLayer, provincesLayer, districtsLayer, totalCountries = 0, totalDistricts = 0;
+    let distProvMap = {};
+    let provListGlobal = []; // {name, geom, bbox} — Türkiye filtreleme için
+    function isInTurkey(lng, lat){
+      for (const pr of provListGlobal){
+        if (lng < pr.bbox[0] || lng > pr.bbox[2] || lat < pr.bbox[1] || lat > pr.bbox[3]) continue;
+        if (pointInGeom([lng, lat], pr.geom)) return true;
+      }
+      return false;
+    }
+    const passesLayer = L.layerGroup().addTo(map);
+    const passMarkers = {};
+    let addPassMode = false;
+
+    let districtCentroidsByName = {}; // nrm(name) -> [{lat,lng,prov}]
+    let provCentroidByName = {};      // nrm(name) -> {lat,lng}
+
+    function jget(url){ return fetch(url).then(r => { if(!r.ok) throw new Error(url); return r.json(); }); }
+
+    Promise.all([ jget(SRC.world), jget(SRC.provinces), jget(SRC.districts) ])
+      .then(([world, provinces, districts]) => {
+
+        // --- World countries ---
+        totalCountries = world.features.length;
+        countriesLayer = L.geoJSON(world, {
+          pane:'countriesPane',
+          style: f => visitedCountries.has(f.id) ? STYLE.countryVisited : STYLE.countryDefault,
+          onEachFeature: (f, lyr) => {
+            if (f.id === 'TUR') return;
+            lyr.bindTooltip(f.properties.name, { sticky:true });
+            lyr.on('click', () => {
+              if (visitedCountries.has(f.id)) visitedCountries.delete(f.id); else visitedCountries.add(f.id);
+              saveSet(LS.countries, visitedCountries);
+              lyr.setStyle(visitedCountries.has(f.id) ? STYLE.countryVisited : STYLE.countryDefault);
+              updateStats();
+            });
+            lyr.on('mouseover', () => lyr.setStyle(STYLE.countryHover));
+            lyr.on('mouseout',  () => lyr.setStyle(visitedCountries.has(f.id) ? STYLE.countryVisited : STYLE.countryDefault));
+          }
+        }).addTo(map);
+
+        // --- Province centroids + bbox ---
+        const provList = provinces.features.map(f => {
+          const name = f.properties.Name || f.properties.name;
+          const c = featureCentroid(f.geometry);
+          provCentroidByName[nrm(name)] = { lat:c[1], lng:c[0] };
+          return { name, geom:f.geometry, bbox:bbox(f.geometry) };
+        });
+        provListGlobal = provList;
+
+        // --- Turkey provinces (il) layer ---
+        provincesLayer = L.geoJSON(provinces, {
+          pane:'provincesPane',
+          style: f => visitedProvinces.has(nrm(f.properties.Name)) ? STYLE.provinceVisited : STYLE.provinceDefault,
+          onEachFeature: (f, lyr) => {
+            const nm = nrm(f.properties.Name);
+            lyr.bindTooltip(f.properties.Name, { sticky:true });
+            lyr.on('click', () => {
+              if (visitedProvinces.has(nm)) visitedProvinces.delete(nm); else visitedProvinces.add(nm);
+              saveSet(LS.provincesV, visitedProvinces);
+              lyr.setStyle(visitedProvinces.has(nm) ? STYLE.provinceVisited : STYLE.provinceDefault);
+              updateStats();
+            });
+            lyr.on('mouseover', () => lyr.setStyle(STYLE.provinceHover));
+            lyr.on('mouseout',  () => lyr.setStyle(visitedProvinces.has(nm) ? STYLE.provinceVisited : STYLE.provinceDefault));
+          }
+        });
+
+        // --- Districts ---
+        totalDistricts = districts.features.length;
+        const cached = localStorage.getItem(LS.distmap);
+        if (cached) { try { distProvMap = JSON.parse(cached); } catch(e){ distProvMap = {}; } }
+        const needCompute = !cached || Object.keys(distProvMap).length !== totalDistricts;
+
+        districts.features.forEach((f, i) => {
+          const c = featureCentroid(f.geometry);
+          // build district name lookup
+          const nm = nrm(f.properties.Name);
+          (districtCentroidsByName[nm] = districtCentroidsByName[nm] || []).push({ lat:c[1], lng:c[0], idx:i });
+          if (needCompute) {
+            let found = null;
+            for (const pr of provList) {
+              if (c[0]<pr.bbox[0]||c[0]>pr.bbox[2]||c[1]<pr.bbox[1]||c[1]>pr.bbox[3]) continue;
+              if (pointInGeom(c, pr.geom)) { found = pr.name; break; }
+            }
+            if (!found) { let best=Infinity; for(const pr of provList){const pc=[(pr.bbox[0]+pr.bbox[2])/2,(pr.bbox[1]+pr.bbox[3])/2];const dd=(pc[0]-c[0])**2+(pc[1]-c[1])**2;if(dd<best){best=dd;found=pr.name;}} }
+            distProvMap[i] = found;
+          }
+        });
+        if (needCompute) localStorage.setItem(LS.distmap, JSON.stringify(distProvMap));
+        // attach province to district name lookup
+        Object.keys(districtCentroidsByName).forEach(nm => {
+          districtCentroidsByName[nm].forEach(o => { o.prov = distProvMap[o.idx]; });
+        });
+
+        districtsLayer = L.geoJSON(districts, {
+          pane:'districtsPane',
+          style: (function(){ let i=-1; return function(){ i++; return visitedDistricts.has(String(i)) ? STYLE.districtVisited : STYLE.districtDefault; }; })(),
+          onEachFeature: (function(){ let i=-1; return function(f, lyr){
+            i++; const idx = String(i); const il = distProvMap[idx] || '';
+            lyr._il = il;
+            lyr.bindTooltip(f.properties.Name + (il ? ' / ' + il : ''), { sticky:true });
+            lyr.on('click', () => {
+              if (visitedDistricts.has(idx)) visitedDistricts.delete(idx); else visitedDistricts.add(idx);
+              saveSet(LS.districts, visitedDistricts);
+              lyr.setStyle(visitedDistricts.has(idx) ? STYLE.districtVisited : STYLE.districtDefault);
+              updateStats();
+            });
+            lyr.on('mouseover', () => lyr.setStyle(STYLE.districtHover));
+            lyr.on('mouseout',  () => lyr.setStyle(visitedDistricts.has(idx) ? STYLE.districtVisited : STYLE.districtDefault));
+          }; })()
+        }).addTo(map);
+
+        // --- Mountain passes (located from district/province centroids) ---
+        buildPasses();
+
+        const overlays = {
+          'Countries (World)': countriesLayer,
+          'Turkey — Provinces': provincesLayer,
+          'Turkey — Districts': districtsLayer,
+          'Mountain Passes': passesLayer
+        };
+        L.control.layers(baseLayers, overlays, { position:'topright', collapsed:false }).addTo(map);
+
+        buildSearchIndex();
+        document.getElementById('gj-loading').style.display = 'none';
+        updateStats();
+      })
+      .catch(err => {
+        document.getElementById('gj-loading').innerHTML =
+          '<div style="max-width:320px;text-align:center">Could not load map data.<br><small>Check your internet connection and refresh.</small></div>';
+        console.error(err);
+      });
+
+    // ---------------- Pass icons (PNG mountain) ----------------
+    function passIcon(crossed){
+      return L.icon({
+        iconUrl: crossed ? 'assets/images/mountain-done.png' : 'assets/images/mountain-todo.png',
+        iconSize: [26,26], iconAnchor: [13,24], popupAnchor: [0,-22]
+      });
+    }
+
+    // Deterministic small jitter so co-located passes don't fully overlap
+    function jitter(id){ let h=0; for(let i=0;i<id.length;i++) h=(h*31+id.charCodeAt(i))>>>0;
+      const a=(h%360)*Math.PI/180, r=0.06*((h>>9)%100)/100; return [Math.sin(a)*r, Math.cos(a)*r]; }
+
+    function locatePass(p){
+      // average centroids of matched route towns (prefer those in pass province)
+      const pts=[];
+      (p.r||[]).forEach(town => {
+        const arr = districtCentroidsByName[nrm(town)];
+        if (arr && arr.length){
+          let pick = arr[0];
+          if (p.p && p.p.length){ const inProv = arr.find(o => p.p.some(pp => nrm(pp)===nrm(o.prov))); if (inProv) pick = inProv; }
+          pts.push(pick);
+        }
+      });
+      let lat, lng;
+      if (pts.length){ lat = pts.reduce((s,o)=>s+o.lat,0)/pts.length; lng = pts.reduce((s,o)=>s+o.lng,0)/pts.length; }
+      else if (p.p && provCentroidByName[nrm(p.p[0])]){ const c=provCentroidByName[nrm(p.p[0])]; lat=c.lat; lng=c.lng; }
+      else return null;
+      const j = jitter(p.id);
+      return [lat + j[0], lng + j[1]];
+    }
+
+    function makePassPopup(p, latlng, isCustom){
+      const done = crossedPasses.has(p.id);
+      const meta = [];
+      if (p.e) meta.push('Elevation: ' + p.e + ' m');
+      if (p.r && p.r.length) meta.push('Route: ' + p.r.join(' – '));
+      if (p.p && p.p.length) meta.push('Province: ' + p.p.join(' / '));
+      return '<b>' + p.n + '</b>' +
+        '<div class="gj-pop-meta">' + meta.join('<br>') + '</div>' +
+        '<div class="gj-pop-meta" style="margin-top:6px;font-weight:700">' + (done ? '✓ Crossed' : 'Not crossed yet') + '</div>' +
+        '<button class="gj-pop-btn" onclick="window.gjTogglePass(\'' + p.id + '\')">' + (done ? 'Undo' : 'Mark as crossed') + '</button>' +
+        (isCustom ? '<br><button class="gj-pop-btn sec" onclick="window.gjDeletePass(\'' + p.id + '\')">Delete pass</button>' : '');
+    }
+
+    function addPassMarker(p, isCustom){
+      let latlng;
+      if (typeof p.lat === 'number' && typeof p.lng === 'number') latlng = [p.lat, p.lng];
+      else latlng = locatePass(p);
+      if (!latlng) return;
+      const m = L.marker(latlng, { icon: passIcon(crossedPasses.has(p.id)) }).addTo(passesLayer);
+      function refresh(){ m.setIcon(passIcon(crossedPasses.has(p.id))); m.bindPopup(makePassPopup(p, latlng, isCustom)); }
+      refresh();
+      passMarkers[p.id] = { marker:m, refresh, name:p.n, latlng };
+    }
+    // Mountain passes are loaded from OpenStreetMap (Overpass API) with real coordinates.
+    let osmPasses = [];
+    function loadOsmPasses(){
+      const KEY = 'gj_osmPasses_v2';
+      try { const c = JSON.parse(localStorage.getItem(KEY) || 'null');
+        if (c && c.ts && (Date.now()-c.ts) < 30*864e5 && c.passes && c.passes.length) return Promise.resolve(c.passes); } catch(e){}
+      const q = '[out:json][timeout:60];(node["mountain_pass"="yes"](35.7,25.5,42.7,45.2);way["mountain_pass"="yes"](35.7,25.5,42.7,45.2);node["natural"="saddle"]["name"~".+"]["ele"](35.7,25.5,42.7,45.2););out center;';
+      const endpoints = [
+        'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(q),
+        'https://overpass.kumi.systems/api/interpreter?data=' + encodeURIComponent(q)
+      ];
+      function tryFetch(i){
+        if (i >= endpoints.length) return Promise.resolve([]);
+        return fetch(endpoints[i]).then(r => { if(!r.ok) throw new Error('overpass '+r.status); return r.json(); })
+          .then(d => {
+            const passes = (d.elements||[]).filter(e => e.tags && e.tags.name).map(e => ({
+              id: 'osm_' + e.type + e.id,
+              n: e.tags.name,
+              lat: e.lat != null ? e.lat : (e.center && e.center.lat),
+              lng: e.lon != null ? e.lon : (e.center && e.center.lon),
+              e: e.tags.ele || ''
+            })).filter(p => p.lat != null && p.lng != null);
+            try { localStorage.setItem(KEY, JSON.stringify({ ts: Date.now(), passes })); } catch(e){}
+            return passes;
+          })
+          .catch(() => tryFetch(i+1));
+      }
+      return tryFetch(0);
+    }
+    // Fallback: embedded pedalla list (277), placed at the midpoint of route-town
+    // district centroids. Used when OSM/Overpass is unreachable (e.g. opened via file://).
+    function buildFallbackPasses(){
+      const src = (typeof ALL_PASSES !== 'undefined') ? ALL_PASSES : [];
+      const out = [];
+      src.forEach(p => { const ll = locatePass(p); if (ll) out.push({ id:p.id, n:p.n, lat:ll[0], lng:ll[1], e:p.e, r:p.r, p:p.p }); });
+      return out;
+    }
+    function buildPasses(){
+      loadOsmPasses().then(list => {
+        // Sadece Türkiye sınırları içindekiler (komşu ülke geçitlerini ele)
+        if (list && list.length) list = list.filter(p => isInTurkey(p.lng, p.lat));
+        if (list && list.length) osmPasses = list;          // real OSM coordinates
+        else osmPasses = buildFallbackPasses();              // approx fallback
+        osmPasses.forEach(p => addPassMarker(p, false));
+        customPasses.forEach(p => addPassMarker(p, true));
+        buildSearchIndex();
+        updateStats();
+      });
+    }
+    window.gjTogglePass = function(id){
+      if (crossedPasses.has(id)) crossedPasses.delete(id); else crossedPasses.add(id);
+      saveSet(LS.passes, crossedPasses);
+      if (passMarkers[id]){ passMarkers[id].refresh(); passMarkers[id].marker.openPopup(); }
+      updateStats();
+    };
+    window.gjDeletePass = function(id){
+      customPasses = customPasses.filter(p => p.id !== id); saveArr(LS.custom, customPasses);
+      crossedPasses.delete(id); saveSet(LS.passes, crossedPasses);
+      if (passMarkers[id]){ passesLayer.removeLayer(passMarkers[id].marker); delete passMarkers[id]; }
+      updateStats();
+    };
+
+    map.on('click', function(e){
+      if (!addPassMode) return;
+      const name = prompt('Name of the mountain pass:');
+      if (!name) return;
+      const p = { id:'c_'+Date.now(), n:name.trim(), lat:e.latlng.lat, lng:e.latlng.lng, custom:true };
+      customPasses.push(p); saveArr(LS.custom, customPasses);
+      addPassMarker(p, true); setAddPassMode(false); updateStats();
+    });
+    function setAddPassMode(on){ addPassMode = on; const b=document.getElementById('gj-addpass'); if(b) b.classList.toggle('active', on);
+      document.getElementById('map').style.cursor = on ? 'crosshair' : ''; }
+
+    // ---------------- Search ----------------
+    let searchData = [];
+    function buildSearchIndex(){
+      searchData = [];
+      if (countriesLayer) countriesLayer.eachLayer(l => { const n = l.feature && l.feature.properties && l.feature.properties.name; if (n) searchData.push({ label:n, type:'Country', typeLabel:'Country', sub:'', layer:l, group:countriesLayer }); });
+      if (provincesLayer) provincesLayer.eachLayer(l => { const n = l.feature.properties.Name; if (n) searchData.push({ label:n, type:'Province', typeLabel:'Province', sub:'', layer:l, group:provincesLayer }); });
+      if (districtsLayer) districtsLayer.eachLayer(l => { const n = l.feature.properties.Name; if (n) searchData.push({ label:n, type:'District', typeLabel:'District', sub:(l._il||''), layer:l, group:districtsLayer }); });
+      Object.keys(passMarkers).forEach(id => { const o = passMarkers[id]; searchData.push({ label:o.name||id, type:'Pass', typeLabel:'Pass', sub:'', latlng:o.latlng, marker:o.marker, group:passesLayer }); });
+    }
+    function highlightLayer(layer){
+      const w=layer.options.weight, c=layer.options.color, fc=layer.options.fillColor, fo=layer.options.fillOpacity;
+      try { layer.setStyle({ weight:4, color:'#ff1744' }); layer.bringToFront && layer.bringToFront(); layer.openTooltip && layer.openTooltip(); } catch(e){}
+      setTimeout(()=>{ try { layer.setStyle({ weight:w, color:c, fillColor:fc, fillOpacity:fo }); } catch(e){} }, 1900);
+    }
+    function focusResult(item){
+      if (item.group && !map.hasLayer(item.group)) map.addLayer(item.group);
+      if (item.layer){
+        try { map.fitBounds(item.layer.getBounds(), { maxZoom: item.type==='Country'?6:10, padding:[40,40] }); } catch(e){}
+        highlightLayer(item.layer);
+      } else if (item.latlng){
+        map.flyTo(item.latlng, 10);
+        if (item.marker) setTimeout(()=>{ try{ item.marker.openPopup(); }catch(e){} }, 650);
+      }
+    }
+
+    const SearchControl = L.Control.extend({
+      options:{ position:'topleft' },
+      onAdd:function(){
+        const div = L.DomUtil.create('div','gj-search');
+        div.innerHTML =
+          '<input id="gj-q" type="text" autocomplete="off" placeholder="Search country, province, district or pass…">' +
+          '<span class="gj-search-ico">⌕</span>' +
+          '<div class="gj-results" id="gj-results"></div>';
+        L.DomEvent.disableClickPropagation(div); L.DomEvent.disableScrollPropagation(div);
+        return div;
+      }
+    });
+    map.addControl(new SearchControl());
+
+    (function(){
+      const qEl = document.getElementById('gj-q');
+      const resEl = document.getElementById('gj-results');
+      let current = [], activeIdx = -1;
+      function render(list){
+        current = list; activeIdx = -1;
+        if (!list.length){ resEl.classList.remove('open'); resEl.innerHTML=''; return; }
+        resEl.innerHTML = list.map((it,i) =>
+          '<div class="gj-result" data-i="'+i+'"><span>'+it.label+(it.sub?' <span class="gj-sub">'+it.sub+'</span>':'')+'</span>'+
+          '<span class="gj-tag">'+it.typeLabel+'</span></div>').join('');
+        resEl.classList.add('open');
+      }
+      function doSearch(q){
+        const nq = nrm(q);
+        if (nq.length < 2){ render([]); return; }
+        const m = searchData.filter(it => nrm(it.label).indexOf(nq) >= 0);
+        m.sort((a,b)=>{ const as=nrm(a.label).indexOf(nq)===0?0:1, bs=nrm(b.label).indexOf(nq)===0?0:1; return as-bs || a.label.localeCompare(b.label,'tr'); });
+        render(m.slice(0,12));
+      }
+      function paint(){ [...resEl.children].forEach((c,i)=>c.classList.toggle('active', i===activeIdx)); }
+      function choose(it){ if(!it) return; focusResult(it); resEl.classList.remove('open'); qEl.value = it.label; }
+      qEl.addEventListener('input', ()=>doSearch(qEl.value));
+      qEl.addEventListener('keydown', e=>{
+        if (e.key==='ArrowDown'){ activeIdx=Math.min(activeIdx+1,current.length-1); paint(); e.preventDefault(); }
+        else if (e.key==='ArrowUp'){ activeIdx=Math.max(activeIdx-1,0); paint(); e.preventDefault(); }
+        else if (e.key==='Enter'){ choose(current[activeIdx>=0?activeIdx:0]); }
+        else if (e.key==='Escape'){ resEl.classList.remove('open'); }
+      });
+      resEl.addEventListener('click', e=>{ const d=e.target.closest('.gj-result'); if(d) choose(current[+d.dataset.i]); });
+      document.addEventListener('click', e=>{ if(!e.target.closest('.gj-search')) resEl.classList.remove('open'); });
+    })();
+
+    // ---------------- Stats panel ----------------
+    const StatsControl = L.Control.extend({
+      options:{ position:'topleft' },
+      onAdd:function(){
+        const div = L.DomUtil.create('div','gj-stats');
+        div.innerHTML =
+          '<div class="gj-stats-head" id="gj-stats-toggle"><h3>My Travel Stats</h3><span class="chev">▾</span></div>' +
+          '<div class="gj-stats-body">' +
+            '<div class="gj-block"><h4>Turkey</h4>' +
+              '<div class="gj-stat-row"><span class="label">Provinces visited</span><span class="val" id="s-il">0 / 81</span></div>' +
+              '<div class="gj-bar tr"><span id="bar-il"></span></div><div class="gj-pct" id="pct-il">0%</div>' +
+              '<div class="gj-stat-row" style="margin-top:8px"><span class="label">Districts marked</span><span class="val" id="s-ilce">0</span></div>' +
+            '</div>' +
+            '<div class="gj-block"><h4>World</h4>' +
+              '<div class="gj-stat-row"><span class="label">Countries visited</span><span class="val" id="s-ulke">0</span></div>' +
+              '<div class="gj-bar wd"><span id="bar-ulke"></span></div><div class="gj-pct" id="pct-ulke">0%</div>' +
+            '</div>' +
+            '<div class="gj-block"><h4>Mountain Passes</h4>' +
+              '<div class="gj-stat-row"><span class="label">Passes crossed</span><span class="val" id="s-pass">0</span></div>' +
+              '<div class="gj-bar ps"><span id="bar-pass"></span></div><div class="gj-pct" id="pct-pass">0%</div>' +
+            '</div>' +
+            '<div class="gj-block"><h4>Tools</h4>' +
+              '<div class="gj-actions"><button class="gj-btn" id="gj-addpass">+ Add pass</button><button class="gj-btn danger" id="gj-reset">Reset</button></div>' +
+              '<div class="gj-hint">Click a country / district to mark it visited. Click again to remove. Use “Add pass”, then click the map to add your own pass.</div>' +
+            '</div>' +
+          '</div>';
+        L.DomEvent.disableClickPropagation(div); L.DomEvent.disableScrollPropagation(div);
+        return div;
+      }
+    });
+    map.addControl(new StatsControl());
+
+    document.getElementById('gj-stats-toggle').addEventListener('click', function(){ this.parentElement.classList.toggle('collapsed'); });
+    document.getElementById('gj-addpass').addEventListener('click', function(){ setAddPassMode(!addPassMode); });
+    document.getElementById('gj-reset').addEventListener('click', function(){
+      if (!confirm('Clear all your marks? (countries, districts, mountain passes)')) return;
+      visitedCountries.clear(); visitedProvinces.clear(); visitedDistricts.clear(); crossedPasses.clear(); customPasses = [];
+      saveSet(LS.countries,visitedCountries); saveSet(LS.provincesV,visitedProvinces); saveSet(LS.districts,visitedDistricts); saveSet(LS.passes,crossedPasses); saveArr(LS.custom,customPasses);
+      if (countriesLayer) countriesLayer.setStyle(STYLE.countryDefault);
+      if (provincesLayer) provincesLayer.setStyle(STYLE.provinceDefault);
+      if (districtsLayer) districtsLayer.setStyle(STYLE.districtDefault);
+      Object.keys(passMarkers).forEach(id => {
+        if (id.indexOf('c_')===0){ passesLayer.removeLayer(passMarkers[id].marker); delete passMarkers[id]; }
+        else passMarkers[id].refresh();
+      });
+      updateStats();
+    });
+
+    function updateStats(){
+      const ilSet = new Set();
+      visitedDistricts.forEach(idx => { const il = distProvMap[idx]; if (il) ilSet.add(nrm(il)); });
+      visitedProvinces.forEach(nm => ilSet.add(nm));
+      const ilCount = ilSet.size;
+      document.getElementById('s-il').textContent = ilCount + ' / ' + TOTAL_PROVINCES;
+      const ilPct = Math.round(ilCount / TOTAL_PROVINCES * 100);
+      document.getElementById('bar-il').style.width = ilPct + '%';
+      document.getElementById('pct-il').textContent = ilPct + '%';
+      document.getElementById('s-ilce').textContent = visitedDistricts.size + (totalDistricts ? ' / ' + totalDistricts : '');
+
+      const totalPasses = osmPasses.length + customPasses.length;
+      const crossedCount = crossedPasses.size;
+      document.getElementById('s-pass').textContent = crossedCount + ' / ' + totalPasses;
+      const pPct = totalPasses ? Math.round(crossedCount / totalPasses * 100) : 0;
+      document.getElementById('bar-pass').style.width = pPct + '%';
+      document.getElementById('pct-pass').textContent = pPct + '%';
+
+      let countryCount = visitedCountries.size;
+      if (ilCount > 0 && !visitedCountries.has('TUR')) countryCount += 1;
+      const denom = totalCountries || 195;
+      document.getElementById('s-ulke').textContent = countryCount + ' / ' + denom;
+      const wpct = Math.round(countryCount / denom * 100);
+      document.getElementById('bar-ulke').style.width = wpct + '%';
+      document.getElementById('pct-ulke').textContent = wpct + '%';
+    }
+    updateStats();
+  });
+  </script>
+
+</body>
+</html>
