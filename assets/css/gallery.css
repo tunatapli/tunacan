@@ -1,0 +1,256 @@
+/* Mevcut arka plan vs. */
+.section-background {
+  background: url('../images/portfolio.png');
+}
+.section-item-detail {
+  color: #000;
+  font-weight: bold;
+}
+
+/* Izgara yoğunluğu kontrol çubuğu */
+.gallery-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 0 auto 32px;
+  padding: 12px 22px;
+  max-width: 560px;
+  background: #fff;
+  border-radius: 999px;
+  box-shadow: 0 6px 20px rgba(123, 47, 247, 0.12);
+  flex-wrap: nowrap;
+}
+.gallery-controls .gc-label {
+  font-size: 12px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #888;
+  white-space: nowrap;
+}
+.gallery-controls .gc-slider {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+}
+.gallery-controls .gc-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: #7b2ff7;
+  min-width: 56px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Özel range slider */
+.gallery-controls input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #7b2ff7 0%, #f107a3 25%, rgba(0,0,0,0.12) 25%);
+  cursor: pointer;
+  outline: none;
+}
+.gallery-controls input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #7b2ff7;
+  box-shadow: 0 2px 8px rgba(123, 47, 247, 0.5);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.gallery-controls input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.18);
+  box-shadow: 0 0 0 8px rgba(123, 47, 247, 0.15), 0 2px 8px rgba(123, 47, 247, 0.5);
+}
+.gallery-controls input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.25);
+}
+.gallery-controls input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #7b2ff7;
+  box-shadow: 0 2px 8px rgba(123, 47, 247, 0.5);
+  cursor: pointer;
+}
+.gallery-controls input[type="range"]::-moz-range-track {
+  height: 8px;
+  border-radius: 999px;
+  background: transparent;
+}
+@media (max-width: 600px) {
+  .gallery-controls .gc-label { display: none; }
+  .gallery-controls { gap: 12px; }
+}
+
+/* Galeri kartları - CSS grid (sütun sayısı slider ile değişir) */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), 1fr);
+  gap: 20px;
+}
+.photo-card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform .2s;
+}
+.photo-card:hover {
+  transform: translateY(-4px);
+}
+/* Mobilde her zaman en fazla 2 sütun */
+@media (max-width: 600px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+.coord-pending {
+  color: #999;
+  font-style: italic;
+}
+.photo-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.photo-info {
+  padding: 12px;
+}
+.photo-info p {
+  margin: 6px 0;
+  line-height: 1.4;
+}
+.photo-info a {
+  color: #0066cc;
+  text-decoration: none;
+}
+.photo-info a:hover {
+  text-decoration: underline;
+}
+/* Kart görselleri ve hover efekti */
+.photo-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.photo-card img:hover {
+  transform: scale(1.05);
+}
+
+/* Kartlar gölge ve hafif yukarı kaydırma */
+.photo-card {
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform .2s ease;
+}
+.photo-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Alt kısım: 3 satır metin + View on map */
+.photo-info {
+  padding: 12px;
+}
+.photo-info p {
+  margin: 6px 0;
+  line-height: 1.4;
+  font-size: 14px;
+}
+.photo-info a {
+  color: #0066cc;
+  text-decoration: none;
+  font-weight: bold;
+}
+.photo-info a:hover {
+  text-decoration: underline;
+}
+
+/* Modal arkaplan ve ortalama */
+#modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.8);
+  display: none; /* JS ile açılacak */
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+/* Modal gösterme */
+#modal.active {
+  display: flex;
+}
+/* Ortalanmış fotoğraf */
+.modal-content {
+  max-width: 90vw;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  cursor: zoom-in;
+  transition: transform .25s ease;
+  will-change: transform;
+}
+.modal-content.zoomed {
+  transform: scale(2.4);
+  cursor: zoom-out;
+}
+/* Kapatma tuşu */
+.close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 40px;
+  line-height: 1;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  z-index: 1002;
+  transition: transform .15s ease, opacity .15s ease;
+  opacity: .85;
+}
+.close:hover {
+  transform: scale(1.15);
+  opacity: 1;
+}
+/* Büyüteç (yakınlaştırma) butonu */
+.zoom-btn {
+  position: absolute;
+  bottom: 28px;
+  right: 28px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.14);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1002;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+  transition: transform .15s ease, background .15s ease;
+}
+.zoom-btn:hover {
+  background: rgba(123, 47, 247, 0.85);
+  transform: scale(1.1);
+}
+.zoom-btn svg {
+  display: block;
+}
