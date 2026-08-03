@@ -174,6 +174,8 @@
 
   <!-- 277 mountain passes data -->
   <script src="assets/js/passes.js"></script>
+  <!-- Published marks (owner-edited). Read-only for visitors. -->
+  <script src="assets/js/geojourney-data.js"></script>
 
   <script>
   document.addEventListener('DOMContentLoaded', function () {
@@ -197,11 +199,25 @@
     const loadArr = k => JSON.parse(localStorage.getItem(k) || '[]');
     const saveArr = (k,a) => localStorage.setItem(k, JSON.stringify(a));
 
-    let visitedCountries = loadSet(LS.countries);
-    let visitedProvinces = loadSet(LS.provincesV); // il adları (normalize)
-    let visitedDistricts = loadSet(LS.districts);
-    let crossedPasses    = loadSet(LS.passes);
-    let customPasses     = loadArr(LS.custom);
+    // ---------------- Edit gate ----------------
+    // Visitors: read-only. Owner: open geojourney.html?edit=tapli to edit, then Export.
+    const EDIT = new URLSearchParams(location.search).get('edit') === 'tapli';
+    const PUB = window.GEO_DATA || { countries:[], provinces:[], districts:[], passes:[], customPasses:[] };
+
+    let visitedCountries, visitedProvinces, visitedDistricts, crossedPasses, customPasses;
+    if (EDIT) {
+      visitedCountries = loadSet(LS.countries).size ? loadSet(LS.countries) : new Set(PUB.countries);
+      visitedProvinces = loadSet(LS.provincesV).size ? loadSet(LS.provincesV) : new Set(PUB.provinces);
+      visitedDistricts = loadSet(LS.districts).size ? loadSet(LS.districts) : new Set(PUB.districts);
+      crossedPasses    = loadSet(LS.passes).size ? loadSet(LS.passes) : new Set(PUB.passes);
+      customPasses     = loadArr(LS.custom).length ? loadArr(LS.custom) : (PUB.customPasses || []).slice();
+    } else {
+      visitedCountries = new Set(PUB.countries);
+      visitedProvinces = new Set(PUB.provinces);
+      visitedDistricts = new Set(PUB.districts);
+      crossedPasses    = new Set(PUB.passes);
+      customPasses     = (PUB.customPasses || []).slice();
+    }
 
     // ---------------- Map & base layers ----------------
     const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19, attribution:'© OpenStreetMap' });
@@ -269,7 +285,7 @@
           onEachFeature: (f, lyr) => {
             if (f.id === 'TUR') return;
             lyr.bindTooltip(f.properties.name, { sticky:true });
-            lyr.on('click', () => {
+            if (EDIT) lyr.on('click', () => {
               if (visitedCountries.has(f.id)) visitedCountries.delete(f.id); else visitedCountries.add(f.id);
               saveSet(LS.countries, visitedCountries);
               lyr.setStyle(visitedCountries.has(f.id) ? STYLE.countryVisited : STYLE.countryDefault);
@@ -296,7 +312,7 @@
           onEachFeature: (f, lyr) => {
             const nm = nrm(f.properties.Name);
             lyr.bindTooltip(f.properties.Name, { sticky:true });
-            lyr.on('click', () => {
+            if (EDIT) lyr.on('click', () => {
               if (visitedProvinces.has(nm)) visitedProvinces.delete(nm); else visitedProvinces.add(nm);
               saveSet(LS.provincesV, visitedProvinces);
               lyr.setStyle(visitedProvinces.has(nm) ? STYLE.provinceVisited : STYLE.provinceDefault);
@@ -341,7 +357,7 @@
             i++; const idx = String(i); const il = distProvMap[idx] || '';
             lyr._il = il;
             lyr.bindTooltip(f.properties.Name + (il ? ' / ' + il : ''), { sticky:true });
-            lyr.on('click', () => {
+            if (EDIT) lyr.on('click', () => {
               if (visitedDistricts.has(idx)) visitedDistricts.delete(idx); else visitedDistricts.add(idx);
               saveSet(LS.districts, visitedDistricts);
               lyr.setStyle(visitedDistricts.has(idx) ? STYLE.districtVisited : STYLE.districtDefault);
@@ -413,8 +429,8 @@
       return '<b>' + p.n + '</b>' +
         '<div class="gj-pop-meta">' + meta.join('<br>') + '</div>' +
         '<div class="gj-pop-meta" style="margin-top:6px;font-weight:700">' + (done ? '✓ Crossed' : 'Not crossed yet') + '</div>' +
-        '<button class="gj-pop-btn" onclick="window.gjTogglePass(\'' + p.id + '\')">' + (done ? 'Undo' : 'Mark as crossed') + '</button>' +
-        (isCustom ? '<br><button class="gj-pop-btn sec" onclick="window.gjDeletePass(\'' + p.id + '\')">Delete pass</button>' : '');
+        (EDIT ? '<button class="gj-pop-btn" onclick="window.gjTogglePass(\'' + p.id + '\')">' + (done ? 'Undo' : 'Mark as crossed') + '</button>' : '') +
+        (EDIT && isCustom ? '<br><button class="gj-pop-btn sec" onclick="window.gjDeletePass(\'' + p.id + '\')">Delete pass</button>' : '');
     }
 
     function addPassMarker(p, isCustom){
@@ -592,10 +608,15 @@
               '<div class="gj-stat-row"><span class="label">Passes crossed</span><span class="val" id="s-pass">0</span></div>' +
               '<div class="gj-bar ps"><span id="bar-pass"></span></div><div class="gj-pct" id="pct-pass">0%</div>' +
             '</div>' +
-            '<div class="gj-block"><h4>Tools</h4>' +
-              '<div class="gj-actions"><button class="gj-btn" id="gj-addpass">+ Add pass</button><button class="gj-btn danger" id="gj-reset">Reset</button></div>' +
-              '<div class="gj-hint">Click a country / district to mark it visited. Click again to remove. Use “Add pass”, then click the map to add your own pass.</div>' +
-            '</div>' +
+            (EDIT ?
+              '<div class="gj-block"><h4>Tools · edit mode</h4>' +
+                '<div class="gj-actions"><button class="gj-btn" id="gj-addpass">+ Add pass</button><button class="gj-btn danger" id="gj-reset">Reset</button></div>' +
+                '<div class="gj-actions" style="margin-top:6px"><button class="gj-btn" id="gj-export" style="width:100%;background:#7b2ff7;color:#fff">⤓ Export data</button></div>' +
+                '<div class="gj-hint">Click a country / province / district to toggle. Use “Add pass” then click the map. When finished, press “Export data”, replace <b>assets/js/geojourney-data.js</b> and commit.</div>' +
+              '</div>'
+              :
+              '<div class="gj-block"><div class="gj-hint">Read-only view — hover to see names, click a mountain pass for details.</div></div>'
+            ) +
           '</div>';
         L.DomEvent.disableClickPropagation(div); L.DomEvent.disableScrollPropagation(div);
         return div;
@@ -604,8 +625,31 @@
     map.addControl(new StatsControl());
 
     document.getElementById('gj-stats-toggle').addEventListener('click', function(){ this.parentElement.classList.toggle('collapsed'); });
-    document.getElementById('gj-addpass').addEventListener('click', function(){ setAddPassMode(!addPassMode); });
-    document.getElementById('gj-reset').addEventListener('click', function(){
+
+    function exportData(){
+      var data = {
+        countries: [...visitedCountries],
+        provinces: [...visitedProvinces],
+        districts: [...visitedDistricts],
+        passes: [...crossedPasses],
+        customPasses: customPasses
+      };
+      var content = '// Yayınlanan Geo Journey işaretleri — otomatik üretildi.\n' +
+        'window.GEO_DATA = ' + JSON.stringify(data) + ';\n';
+      var blob = new Blob([content], { type: 'application/javascript' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'geojourney-data.js';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+    }
+
+    var _addBtn = document.getElementById('gj-addpass');
+    if (_addBtn) _addBtn.addEventListener('click', function(){ setAddPassMode(!addPassMode); });
+    var _exportBtn = document.getElementById('gj-export');
+    if (_exportBtn) _exportBtn.addEventListener('click', exportData);
+    var _resetBtn = document.getElementById('gj-reset');
+    if (_resetBtn) _resetBtn.addEventListener('click', function(){
       if (!confirm('Clear all your marks? (countries, districts, mountain passes)')) return;
       visitedCountries.clear(); visitedProvinces.clear(); visitedDistricts.clear(); crossedPasses.clear(); customPasses = [];
       saveSet(LS.countries,visitedCountries); saveSet(LS.provincesV,visitedProvinces); saveSet(LS.districts,visitedDistricts); saveSet(LS.passes,crossedPasses); saveArr(LS.custom,customPasses);
